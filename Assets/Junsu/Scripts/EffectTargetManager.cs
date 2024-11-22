@@ -1,12 +1,21 @@
 using System;
 using UnityEngine;
 
-public class EffectTargetManager : MonoBehaviour
+namespace Jambuddy.Junsu
 {
-    public static Action<string> OnBlockApplied;
-
-    public void ApplyBlock(string blockType)
+    public class EffectTargetManager : MonoBehaviour
     {
-        OnBlockApplied.Invoke(blockType);
+        public static Action<string> onBlock;
+
+        public static void ApplyBlock(string blockType)
+        {
+            if (onBlock == null)
+            {
+                Debug.Log("No registered OnBlockApplied");
+                return;
+            }
+            onBlock.Invoke(blockType);
+        }
     }
+
 }
