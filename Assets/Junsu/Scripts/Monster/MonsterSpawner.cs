@@ -16,9 +16,12 @@ namespace Jambuddy.Junsu
 
         private Transform _spawnArea;
 
-        public int _poolSize = 20;
-
         private Dictionary<string, Queue<GameObject>> poolDictionary;
+        
+        private int _poolSize = 20;
+
+        private const int GROWTH = 10;
+
 
         public MonsterSpawner(Transform spawnArea, int poolSize)
         {
@@ -42,6 +45,7 @@ namespace Jambuddy.Junsu
             }
         }
 
+        // 몬스터를 각 종류별로 _poolSize만큼 생성한다.
         private void InitializePools()
         {
             poolDictionary = new Dictionary<string, Queue<GameObject>>();
@@ -63,10 +67,19 @@ namespace Jambuddy.Junsu
 
         public GameObject SpawnMonster(string monsterType)
         {
-            if (!poolDictionary.ContainsKey(monsterType) || poolDictionary[monsterType].Count == 0)
+            if (!poolDictionary.ContainsKey(monsterType))
             {
-                Debug.LogWarning($"No pool available for monster type: {monsterType}");
+                Debug.LogWarning($"해당하는 몬스터 타입이 없습니다: {monsterType}");
                 return null;
+            }
+            if (poolDictionary[monsterType].Count == 0)
+            {
+                for (int i = 0; i < GROWTH; i++)
+                {
+                    GameObject go = UnityEngine.Object.Instantiate(Resources.Load<GameObject>($"Junsu/Prefabs/Monster/{monsterType}"));
+                    go.SetActive(false);
+                    poolDictionary[monsterType].Enqueue(go);
+                }
             }
 
             GameObject monster = poolDictionary[monsterType].Dequeue();
@@ -95,5 +108,4 @@ namespace Jambuddy.Junsu
             poolDictionary[monsterType].Enqueue(monster); // 풀에 다시 추가
         }
     }
-
 }

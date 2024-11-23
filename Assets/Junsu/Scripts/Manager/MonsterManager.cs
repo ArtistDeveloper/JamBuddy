@@ -13,8 +13,8 @@ namespace Jambuddy.Junsu
 
         private void Start()
         {
-            InitMonsterSpawner();
-            RandomSpawn(4);
+            InitMonsterSpawner(10);
+            RandomSpawn(25);
         }
 
         private void RandomSpawn(int repetition)
@@ -28,9 +28,9 @@ namespace Jambuddy.Junsu
             }
         }
 
-        private void InitMonsterSpawner()
+        private void InitMonsterSpawner(int size)
         {
-            _monsterSpawner = new MonsterSpawner(spawnArea, 20);
+            _monsterSpawner = new MonsterSpawner(spawnArea, size);
         }
 
         public void RegisterMonster(GameObject monster)
