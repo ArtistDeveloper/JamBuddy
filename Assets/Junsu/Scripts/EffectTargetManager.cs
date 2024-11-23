@@ -18,7 +18,7 @@ namespace Jambuddy.Junsu
             onAddBlock.Invoke(blockType);
         }
 
-        public static void ApplyBlock()
+        public static void InvokeApplyBlock()
         {
             onApplyEffect.Invoke();
         }

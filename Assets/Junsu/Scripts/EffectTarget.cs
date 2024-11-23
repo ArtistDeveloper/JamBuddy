@@ -15,38 +15,30 @@ namespace Jambuddy.Junsu
     {
         List<Block> _blocks = new List<Block>();
 
-        private void Awake()
-        {
-            SubscribeEvent(EventType.Add, HandleBlockApplication);
-        }
-
-        // 추후 외부에서 호출해서 Target에 대한 Event를 등록할 수 있음
-        public void SubscribeEvent(EventType evtTYpe, Action<string> action)
-        {
-            switch (evtTYpe)
-            {
-                case EventType.Add:
-                    EffectTargetManager.onAddBlock += action;
-                    EffectTargetManager.onApplyEffect += ApplyEffect;
-                    break;
-                default:
-                    break;
-            }
-        }
-
         public void HandleBlockApplication(string blockType)
         {
             Debug.Log($"{gameObject.name} received block: {blockType}");
             
             switch (blockType)
             {
-                case "gravity":
+                case "OppositeMoving":
+                    ApplyMoving();
+                    break;
+                case "Rotation":
+                    ApplyRotation();
+                    break;
+                case "Gravity":
                     ApplyGravity();
                     break;
-                case "rotation":
-                    ApplyRotation();
-                    break;         
+                case "Sizing":
+                    IncreaseSize();
+                    break;
             }
+        }
+
+        private void ApplyMoving()
+        {
+            _blocks.Add(new OppositeMoving());
         }
 
         private void ApplyGravity()
@@ -61,10 +53,10 @@ namespace Jambuddy.Junsu
 
         private void IncreaseSize()
         {
-
+            _blocks.Add(new Sizing());
         }
 
-        private void ApplyEffect()
+        public void ApplyEffect()
         {
             foreach (Block block in _blocks)
             {

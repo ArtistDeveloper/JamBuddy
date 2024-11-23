@@ -9,7 +9,7 @@ namespace Jambuddy.Junsu
         public override void ApplyEffect(EffectTarget target)
         {
             Debug.Log("Rotation 적용");
-            target.StartCoroutine(Rotate(target.transform, 2f)); // 3초 동안 회전
+            target.StartCoroutine(Rotate(target.transform, 10f)); // 10초 동안 회전
         }
 
         private IEnumerator Rotate(Transform targetTransform, float duration)
