@@ -1,31 +1,43 @@
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Jambuddy.Junsu
 {
+    public enum EventType
+    {
+        Add,
+        Delete,
+    }
+
     public class EffectTarget : MonoBehaviour
     {
+        List<Block> _blocks = new List<Block>();
+
         private void Awake()
         {
-            EffectTargetManager.onBlock -= HandleBlockApplication;
-            EffectTargetManager.onBlock += HandleBlockApplication;
+            SubscribeEvent(EventType.Add, HandleBlockApplication);
         }
 
-        //void OnEnable()
-        //{
-        //    EffectTargetManager.OnBlockApplied -= HandleBlockApplication;
-        //    EffectTargetManager.OnBlockApplied += HandleBlockApplication;
-        //}
-
-        //void OnDisable()
-        //{
-        //    EffectTargetManager.OnBlockApplied -= HandleBlockApplication;
-        //}
-
+        // 추후 외부에서 호출해서 Target에 대한 Event를 등록할 수 있음
+        public void SubscribeEvent(EventType evtTYpe, Action<string> action)
+        {
+            switch (evtTYpe)
+            {
+                case EventType.Add:
+                    EffectTargetManager.onAddBlock += action;
+                    EffectTargetManager.onApplyEffect += ApplyEffect;
+                    break;
+                default:
+                    break;
+            }
+        }
 
         public void HandleBlockApplication(string blockType)
         {
-            Debug.Log($"received block: {blockType}");
-            // 블록 타입에 따라 행동 정의
+            Debug.Log($"{gameObject.name} received block: {blockType}");
+            
             switch (blockType)
             {
                 case "gravity":
@@ -33,21 +45,31 @@ namespace Jambuddy.Junsu
                     break;
                 case "rotation":
                     ApplyRotation();
-                    break;
-                    // 다른 블록 타입 추가
+                    break;         
             }
         }
 
         private void ApplyGravity()
         {
-            // 중력 적용 로직
-            Debug.Log($"{gameObject.name} is affected by gravity.");
+            _blocks.Add(new Gravity());
         }
 
         private void ApplyRotation()
         {
-            // 회전 적용 로직
-            Debug.Log($"{gameObject.name} is rotating.");
+            _blocks.Add(new Rotation());
+        }
+
+        private void IncreaseSize()
+        {
+
+        }
+
+        private void ApplyEffect()
+        {
+            foreach (Block block in _blocks)
+            {
+                block.ApplyEffect(this);
+            }
         }
     }
 }

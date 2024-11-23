@@ -7,7 +7,13 @@ namespace Jambuddy.Junsu
     {
         private void Start()
         {
-            EffectTargetManager.ApplyBlock("gravity");
+            EffectTargetManager.AddBlock("gravity");
+            EffectTargetManager.AddBlock("rotation");
+        }
+
+        public void ApplyBlock()
+        {
+            EffectTargetManager.ApplyBlock();
         }
     }
 }
