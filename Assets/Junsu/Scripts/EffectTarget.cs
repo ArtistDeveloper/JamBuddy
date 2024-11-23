@@ -31,7 +31,7 @@ namespace Jambuddy.Junsu
                     ApplyGravity();
                     break;
                 case "Sizing":
-                    IncreaseSize();
+                    ApplyIncreaseSize();
                     break;
             }
         }
@@ -51,7 +51,7 @@ namespace Jambuddy.Junsu
             _blocks.Add(new Rotation());
         }
 
-        private void IncreaseSize()
+        private void ApplyIncreaseSize()
         {
             _blocks.Add(new Sizing());
         }
