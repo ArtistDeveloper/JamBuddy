@@ -1,37 +1,67 @@
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectTarget : MonoBehaviour
+namespace Jambuddy.Junsu
 {
-    private void Awake()
+    public enum EventType
     {
-        
+        Add,
+        Delete,
     }
 
-    public void OnBlockAppliedHandler(string blockType)
+    public class EffectTarget : MonoBehaviour
     {
-        Debug.Log($"received block: {blockType}");
-        // 블록 타입에 따라 행동 정의
-        switch (blockType)
+        List<Block> _blocks = new List<Block>();
+
+        public void HandleBlockApplication(string blockType)
         {
-            case "gravity":
-                //ApplyGravity();
-                break;
-            case "rotation":
-                //ApplyRotation();
-                break;
-                // 다른 블록 타입 추가
+            Debug.Log($"{gameObject.name} received block: {blockType}");
+            
+            switch (blockType)
+            {
+                case "OppositeMoving":
+                    ApplyMoving();
+                    break;
+                case "Rotation":
+                    ApplyRotation();
+                    break;
+                case "Gravity":
+                    ApplyGravity();
+                    break;
+                case "Sizing":
+                    IncreaseSize();
+                    break;
+            }
         }
-    }
 
-    private void ApplyGravity()
-    {
-        // 중력 적용 로직
-        Debug.Log($"{gameObject.name} is affected by gravity.");
-    }
+        private void ApplyMoving()
+        {
+            _blocks.Add(new OppositeMoving());
+        }
 
-    private void ApplyRotation()
-    {
-        // 회전 적용 로직
-        Debug.Log($"{gameObject.name} is rotating.");
+        private void ApplyGravity()
+        {
+            _blocks.Add(new Gravity());
+        }
+
+        private void ApplyRotation()
+        {
+            _blocks.Add(new Rotation());
+        }
+
+        private void IncreaseSize()
+        {
+            _blocks.Add(new Sizing());
+        }
+
+        public void ApplyEffect()
+        {
+            foreach (Block block in _blocks)
+            {
+                block.ApplyEffect(this);
+            }
+        }
     }
 }
