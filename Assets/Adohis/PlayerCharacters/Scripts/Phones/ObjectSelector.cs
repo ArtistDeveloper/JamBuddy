@@ -31,13 +31,13 @@ namespace Jambuddy.Adohi.Character.Smartphone
         private void OnEnable()
         {
             CharacterModeManager.Instance.onHackModeEnter.AddListener(Activate);
-            CharacterModeManager.Instance.onDefaultModeEnter.AddListener(DeActivate);
+            CharacterModeManager.Instance.onDefaultModeStart.AddListener(DeActivate);
         }
 
         private void OnDisable()
         {
             CharacterModeManager.Instance.onHackModeEnter.RemoveListener(Activate);
-            CharacterModeManager.Instance.onDefaultModeEnter.RemoveListener(DeActivate);
+            CharacterModeManager.Instance.onDefaultModeStart.RemoveListener(DeActivate);
         }
 
         void LateUpdate()

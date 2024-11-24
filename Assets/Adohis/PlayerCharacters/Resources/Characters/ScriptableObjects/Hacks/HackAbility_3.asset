@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 519cc4fab801c4b44a0bde61c3dfe100, type: 3}
   m_Name: HackAbility_3
   m_EditorClassIdentifier: 
-  abilityName: "\uC2A4\uD0AC \uC774\uB984 4"
+  abilityName: OppositeMoving
   abilitytoolTip: 
   abilityCost: 0
