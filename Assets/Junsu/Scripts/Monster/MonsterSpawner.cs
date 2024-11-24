@@ -1,6 +1,10 @@
+using MoreMountains.Feedbacks;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Jambuddy.Junsu
 {
@@ -14,7 +18,7 @@ namespace Jambuddy.Junsu
     {
         private List<GameObject> _monsterPrefabs = new List<GameObject>();
 
-        private Transform _spawnArea;
+        private Vector3 _spawnArea;
 
         private Dictionary<string, Queue<GameObject>> poolDictionary;
         
@@ -22,15 +26,29 @@ namespace Jambuddy.Junsu
 
         private const int GROWTH = 10;
 
-        private const float _SPWAN_HEIGNT = 5f;
+        private const float _SPWAN_HEIGNT = 3f;
 
         private float _MIN_DISTANCE = 25f;
 
         private float _MAX_DISTANCE = 80f;
 
+        public MonsterSpawner(int poolSize)
+        {
+            GameObject go = UnityEngine.GameObject.FindGameObjectWithTag("Player");
+            if (go != null)
+            {
+                _spawnArea = go.transform.position;
+            }
+            else
+            {
+                _spawnArea = new Vector3(0f, 0f, 0f);
+            }
+            
+            _poolSize = poolSize;
+            Init();
+        }
 
-
-        public MonsterSpawner(Transform spawnArea, int poolSize)
+        public MonsterSpawner(Vector3 spawnArea, int poolSize)
         {
             _spawnArea = spawnArea;
             _poolSize = poolSize;
@@ -41,6 +59,13 @@ namespace Jambuddy.Junsu
         {
             GetResource();
             InitializePools();
+        }
+
+        public void OnUpdate()
+        {
+            GameObject go = UnityEngine.GameObject.FindGameObjectWithTag("Player");
+            if (go != null)
+                _spawnArea = go.transform.position;
         }
 
         private void GetResource()
@@ -69,6 +94,29 @@ namespace Jambuddy.Junsu
                 }
 
                 poolDictionary.Add(prefab.name, objectPool);
+            }
+        }
+
+        public void RandomSpawn(int repetition)
+        {
+            string[] names = Util.GetNamesOfEnumElement(typeof(MonsterType));
+
+            for (int i = 0; i < repetition; i++)
+            {
+                int rand = UnityEngine.Random.Range(0, names.Length);
+                SpawnMonster(names[rand]);
+            }
+        }
+
+        private IEnumerator RandomSpawnRoutine(float wait)
+        {
+            string[] names = Util.GetNamesOfEnumElement(typeof(MonsterType));
+
+            while (true)
+            {
+                yield return new WaitForSeconds(wait);
+                int rand = UnityEngine.Random.Range(0, names.Length);
+                SpawnMonster(names[rand]);
             }
         }
 
@@ -101,7 +149,7 @@ namespace Jambuddy.Junsu
             float z = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
 
             Vector3 spawnPosition = new Vector3(x, _SPWAN_HEIGNT, z);
-            monster.transform.position = _spawnArea.position + spawnPosition;
+            monster.transform.position = _spawnArea + spawnPosition;
 
             return monster;
         }
