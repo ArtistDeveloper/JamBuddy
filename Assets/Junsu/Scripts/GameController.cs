@@ -72,5 +72,10 @@ namespace Jambuddy.Junsu
         {
             EffectTargetManager.onAddBlock("Gravity");
         }
+
+        public void AddSizingCallback()
+        {
+            EffectTargetManager.onAddBlock("Sizing");
+        }
     }
 }

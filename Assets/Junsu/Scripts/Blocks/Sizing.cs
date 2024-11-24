@@ -7,7 +7,6 @@ namespace Jambuddy.Junsu
     {
         public override void ApplyEffect(EffectTarget target)
         {
-            Debug.Log("Rotation 적용");
             target.StartCoroutine(IncreaseSize(target.transform, 1f));
         }
 
@@ -26,7 +25,6 @@ namespace Jambuddy.Junsu
             }
 
             targetTransform.localScale = targetScale; // 보정: 최종 크기 설정
-            Debug.Log("Size 증가 완료");
         }
     }
 }

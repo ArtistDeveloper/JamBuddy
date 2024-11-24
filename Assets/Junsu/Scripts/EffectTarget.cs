@@ -13,7 +13,7 @@ namespace Jambuddy.Junsu
 
     public class EffectTarget : MonoBehaviour
     {
-        List<Block> _blocks = new List<Block>();
+        Dictionary<Type, Block> _blockDictionary = new Dictionary<Type, Block>();
 
         public void HandleBlockApplication(string blockType)
         {
@@ -38,29 +38,57 @@ namespace Jambuddy.Junsu
 
         private void ApplyMoving()
         {
-            _blocks.Add(new OppositeMoving());
+            if (_blockDictionary.ContainsKey(typeof(OppositeMoving)))
+            {
+                Debug.LogWarning("OppositeMoving block already exists.");
+                return;
+            }
+
+            var block = new OppositeMoving();
+            _blockDictionary[typeof(OppositeMoving)] = block;
         }
 
         private void ApplyGravity()
         {
-            _blocks.Add(new Gravity());
+            if (_blockDictionary.ContainsKey(typeof(Gravity)))
+            {
+                Debug.LogWarning("Gravity block already exists.");
+                return;
+            }
+
+            var block = new Gravity();
+            _blockDictionary[typeof(Gravity)] = block;
         }
 
         private void ApplyRotation()
         {
-            _blocks.Add(new Rotation());
+            if (_blockDictionary.ContainsKey(typeof(Rotation)))
+            {
+                Debug.LogWarning("Rotation block already exists.");
+                return;
+            }
+
+            var block = new Rotation();
+            _blockDictionary[typeof(Rotation)] = block;
         }
 
         private void ApplyIncreaseSize()
         {
-            _blocks.Add(new Sizing());
+            if (_blockDictionary.ContainsKey(typeof(Sizing)))
+            {
+                Debug.LogWarning("Sizing block already exists.");
+                return;
+            }
+
+            var block = new Sizing();
+            _blockDictionary[typeof(Sizing)] = block;
         }
 
         public void ApplyEffect()
         {
-            foreach (Block block in _blocks)
+            foreach (var kvp in _blockDictionary)
             {
-                block.ApplyEffect(this);
+                kvp.Value.ApplyEffect(this);
             }
         }
     }
