@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: f6967b2d081e4c49882be272993b436f
+timeCreated: 1699536989
+AssetOrigin:
+  serializedVersion: 1
+  productId: 270019
+  packageName: Screen Outline - Gradient Image Stylization
+  packageVersion: 1.3.1
+  assetPath: Assets/ScreenOutline/Runtime/Outline/Outline.shader
+  uploadId: 705040

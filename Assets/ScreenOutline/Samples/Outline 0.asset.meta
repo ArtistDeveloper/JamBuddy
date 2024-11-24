@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d18760225b9711d498bffad3ff7f4a52
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 270019
+  packageName: Screen Outline - Gradient Image Stylization
+  packageVersion: 1.3.1
+  assetPath: Assets/ScreenOutline/Samples/Outline 0.asset
+  uploadId: 705040

@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 1df191b2aeb34997b879a9f19827d298
+timeCreated: 1699536988
+AssetOrigin:
+  serializedVersion: 1
+  productId: 270019
+  packageName: Screen Outline - Gradient Image Stylization
+  packageVersion: 1.3.1
+  assetPath: Assets/ScreenOutline/Runtime/Outline/OutlinePass.cs
+  uploadId: 705040

@@ -1,0 +1,193 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2455847263028183347
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
+  m_Name: ColorAdjustments
+  m_EditorClassIdentifier: 
+  active: 0
+  postExposure:
+    m_OverrideState: 0
+    m_Value: 0.54
+  contrast:
+    m_OverrideState: 1
+    m_Value: 10
+  colorFilter:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  hueShift:
+    m_OverrideState: 0
+    m_Value: 15
+  saturation:
+    m_OverrideState: 1
+    m_Value: 45
+--- !u!114 &-144363217901083749
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
+  m_Name: Bloom
+  m_EditorClassIdentifier: 
+  active: 0
+  skipIterations:
+    m_OverrideState: 1
+    m_Value: 1
+  threshold:
+    m_OverrideState: 1
+    m_Value: 0.9
+  intensity:
+    m_OverrideState: 1
+    m_Value: 10.43
+  scatter:
+    m_OverrideState: 1
+    m_Value: 0.7
+  clamp:
+    m_OverrideState: 1
+    m_Value: 65472
+  tint:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  highQualityFiltering:
+    m_OverrideState: 1
+    m_Value: 0
+  downscale:
+    m_OverrideState: 0
+    m_Value: 0
+  maxIterations:
+    m_OverrideState: 0
+    m_Value: 6
+  dirtTexture:
+    m_OverrideState: 1
+    m_Value: {fileID: 0}
+    dimension: 1
+  dirtIntensity:
+    m_OverrideState: 1
+    m_Value: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
+  m_Name: Outline 2
+  m_EditorClassIdentifier: 
+  components:
+  - {fileID: -2455847263028183347}
+  - {fileID: 601115197853340602}
+  - {fileID: -144363217901083749}
+--- !u!114 &601115197853340602
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2303f781f6c04e428d9eb352fa4be37e, type: 3}
+  m_Name: OutlineVol
+  m_EditorClassIdentifier: 
+  active: 1
+  m_Sensitive:
+    m_OverrideState: 1
+    m_Value: 0.011
+  m_Thickness:
+    m_OverrideState: 1
+    m_Value: 0.156
+  m_Color:
+    m_OverrideState: 1
+    m_Value:
+      _grad:
+        serializedVersion: 2
+        key0: {r: 1, g: 1, b: 1, a: 0}
+        key1: {r: 1, g: 0, b: 0, a: 1}
+        key2: {r: 1, g: 0, b: 0.009601116, a: 0}
+        key3: {r: 1, g: 1, b: 1, a: 0}
+        key4: {r: 1, g: 1, b: 1, a: 0}
+        key5: {r: 0, g: 0, b: 0, a: 0}
+        key6: {r: 0, g: 0, b: 0, a: 0}
+        key7: {r: 0, g: 0, b: 0, a: 0}
+        ctime0: 0
+        ctime1: 42918
+        ctime2: 52535
+        ctime3: 65535
+        ctime4: 50641
+        ctime5: 0
+        ctime6: 0
+        ctime7: 0
+        atime0: 25644
+        atime1: 48973
+        atime2: 65535
+        atime3: 65535
+        atime4: 0
+        atime5: 0
+        atime6: 0
+        atime7: 0
+        m_Mode: 0
+        m_ColorSpace: 0
+        m_NumColorKeys: 4
+        m_NumAlphaKeys: 3
+      _pixels:
+      - {r: 1, g: 1, b: 1, a: 0}
+      - {r: 1, g: 0.95074254, b: 0.95074254, a: 0}
+      - {r: 1, g: 0.9014851, b: 0.9014851, a: 0}
+      - {r: 1, g: 0.85222757, b: 0.85222757, a: 0}
+      - {r: 1, g: 0.8029701, b: 0.8029701, a: 0}
+      - {r: 1, g: 0.75371265, b: 0.75371265, a: 0}
+      - {r: 1, g: 0.70445514, b: 0.70445514, a: 0}
+      - {r: 1, g: 0.6551977, b: 0.6551977, a: 0}
+      - {r: 1, g: 0.6059402, b: 0.6059402, a: 0}
+      - {r: 1, g: 0.55668277, b: 0.55668277, a: 0}
+      - {r: 1, g: 0.5074253, b: 0.5074253, a: 0}
+      - {r: 1, g: 0.4581678, b: 0.4581678, a: 0}
+      - {r: 1, g: 0.40891033, b: 0.40891033, a: 0}
+      - {r: 1, g: 0.35965288, b: 0.35965288, a: 0.07880398}
+      - {r: 1, g: 0.31039536, b: 0.31039536, a: 0.16942222}
+      - {r: 1, g: 0.2611379, b: 0.2611379, a: 0.2600404}
+      - {r: 1, g: 0.21188045, b: 0.21188045, a: 0.35065866}
+      - {r: 1, g: 0.16262287, b: 0.16262287, a: 0.441277}
+      - {r: 1, g: 0.11336553, b: 0.11336553, a: 0.531895}
+      - {r: 1, g: 0.064108014, b: 0.064108014, a: 0.6225133}
+      - {r: 1, g: 0.014850557, b: 0.014850557, a: 0.7131315}
+      - {r: 1, g: 0, b: 0.0014742408, a: 0.8037498}
+      - {r: 1, g: 0, b: 0.0035847763, a: 0.8943678}
+      - {r: 1, g: 0, b: 0.00569532, a: 0.9849862}
+      - {r: 1, g: 0, b: 0.00780586, a: 0.8935048}
+      - {r: 1, g: 0.024292968, b: 0.033660844, a: 0.7658611}
+      - {r: 1, g: 0.18691045, b: 0.19471702, a: 0.63821787}
+      - {r: 1, g: 0.34952855, b: 0.3557738, a: 0.5105741}
+      - {r: 1, g: 0.51214635, b: 0.51683027, a: 0.38293064}
+      - {r: 1, g: 0.6747644, b: 0.677887, a: 0.25528693}
+      - {r: 1, g: 0.8373819, b: 0.83894324, a: 0.1276437}
+      - {r: 1, g: 1, b: 1, a: 0}
+  m_Fill:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0, b: 0, a: 0.92156863}
+  m_Adaptive:
+    m_OverrideState: 1
+    m_Value: 0
+  m_Sharp:
+    m_OverrideState: 1
+    m_Value: 0
+  m_Mode:
+    m_OverrideState: 1
+    m_Value: 0
+  m_Remap:
+    m_OverrideState: 1
+    m_Value: 0

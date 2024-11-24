@@ -1,0 +1,16 @@
+{
+  "name": "www.nulltale.screenoutline",
+  "displayName": "Screen Outline",
+  "version": "1.3.1",
+  "unity": "2022.1",
+  "description": "Image Outline effect for Unity Urp and VolFx",
+  "author": {
+    "name": "NullTale",
+    "email": "nulltale@gmail.com",
+    "url": "https://x.com/NullTale"
+  },
+  "dependencies": {
+    "com.unity.render-pipelines.universal": "14.0.6"
+  },
+  "hideInEditor": false
+}

@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: b0b62c30d95a9ca4481bab7d644bfb0b
+timeCreated: 1729157076
+AssetOrigin:
+  serializedVersion: 1
+  productId: 270019
+  packageName: Screen Outline - Gradient Image Stylization
+  packageVersion: 1.3.1
+  assetPath: Assets/ScreenOutline/Runtime/Common/VolFx.Api.cs
+  uploadId: 705040

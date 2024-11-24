@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: f69450162ee62ec4d864cbbc4fd5d3c6
+timeCreated: 1697796247
+AssetOrigin:
+  serializedVersion: 1
+  productId: 270015
+  packageName: Vhs
+  packageVersion: 1.7.0
+  assetPath: Assets/Vhs/Runtime/Common/VolFx.Pass.cs
+  uploadId: 706971
