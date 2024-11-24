@@ -15,7 +15,7 @@ namespace Jambuddy.Junsu
 
         private readonly StageInfo[] stages = new StageInfo[]
         {
-            new StageInfo(0f, 120f, 6, 1f),  // 1-1 단계
+            new StageInfo(0f, 120f, 6, 1f),  // 1-1 단계, 원래는 20f. 테스트를 위해 1f로 해놓았음
             new StageInfo(120f, 300f, 8, 15f), // 1-2 단계
             new StageInfo(300f, 600f, 15, 10f), // 2-1 단계
             new StageInfo(600f, 900f, 18, 8f), // 2-2 단계

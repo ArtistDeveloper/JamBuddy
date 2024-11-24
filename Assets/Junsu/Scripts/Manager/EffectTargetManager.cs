@@ -20,6 +20,11 @@ namespace Jambuddy.Junsu
 
         public static void InvokeApplyBlock()
         {
+            if (onApplyEffect == null)
+            {
+                Debug.Log("No registered onApplyEffect");
+                return;
+            }
             onApplyEffect.Invoke();
         }
     }

@@ -6,18 +6,21 @@ namespace Jambuddy.Junsu
 {
     public class GameController : MonoBehaviour
     {
-        private GameObject _target;
+        private GameObject _target = null;
 
         public void Update()
         {
             if (_target == null)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100.0f))
+                if (Input.GetMouseButtonDown(0))
                 {
-                    _target = hit.collider.gameObject;
-                    SubscribeEvent(EventType.Add, _target);
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+                    if (Physics.Raycast(ray, out hit, 100.0f))
+                    {
+                        _target = hit.collider.gameObject;
+                        SubscribeEvent(EventType.Add, _target);
+                    }
                 }
             }
         }
@@ -28,9 +31,20 @@ namespace Jambuddy.Junsu
             switch (evtType)
             {
                 case EventType.Add:
-                    EffectTargetManager.onAddBlock += go.GetComponent<EffectTarget>().HandleBlockApplication;
-                    EffectTargetManager.onApplyEffect += go.GetComponent<EffectTarget>().ApplyEffect;
+                    if (go == null)
+                        return;
+
+                    if (go.TryGetComponent(out EffectTarget effectTarget))
+                    {
+                        EffectTargetManager.onAddBlock += effectTarget.HandleBlockApplication;
+                        EffectTargetManager.onApplyEffect += effectTarget.ApplyEffect;
+                    }
+                    else
+                    {
+                        _target = null;
+                    }
                     break;
+
                 default:
                     break;
             }

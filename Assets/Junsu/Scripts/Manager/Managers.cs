@@ -24,6 +24,17 @@ namespace Jambuddy.Junsu
             }
         }
 
+        // 몬스터 생성 지형 확인
+        private void OnDrawGizmos()
+        {
+            Vector3 spawnArea = new Vector3(0f, 0f, 0f);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(spawnArea, 25f); // 최소 거리
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(spawnArea, 80f); // 최대 거리
+        }
+
         public GameManager GameMan { get { return Instance._gameMan; } }
 
         public MonsterManager MonsterMan 
