@@ -5,6 +5,8 @@ namespace Jambuddy.Junsu
 {
     public class OppositeMoving : Block
     {
+        private readonly float SPEED = 5f;
+
         public override void ApplyEffect(EffectTarget target)
         {
             Debug.Log("Opposite Moving 적용");
@@ -49,9 +51,9 @@ namespace Jambuddy.Junsu
 
             // 이동이 끝난 후 x, z 축 위치 고정 (y는 변화하지 않음)
             Vector3 finalPosition = new Vector3(
-                startPosition.x + oppositeDirection.x * elapsedTime * 5f,
+                startPosition.x + oppositeDirection.x * elapsedTime * SPEED,
                 targetTransform.position.y, // 기존 y 위치 유지
-                startPosition.z + oppositeDirection.z * elapsedTime * 5f
+                startPosition.z + oppositeDirection.z * elapsedTime * SPEED
             );
 
             targetTransform.position = finalPosition;
