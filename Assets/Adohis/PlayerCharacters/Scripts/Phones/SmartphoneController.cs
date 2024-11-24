@@ -1,79 +1,89 @@
+using Cinemachine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using System.Threading;
+using System;
 using UnityEngine;
 
 namespace Jambuddy.Adohi.Character.Smartphone
 {
     public class SmartphoneController : MonoBehaviour
     {
-        [SerializeField] private GameObject smartphone; // 스마트폰 오브젝트
-        [SerializeField] private float timeScaleSlowDuration = 1f; // 느려지는 시간
-        [SerializeField] private float holdTimeScale = 0f; // 멈춘 타임스케일
-        [SerializeField] private float timeScaleResetDuration = 1f; // 원상복귀 시간
-        [SerializeField] private float smartphoneRaiseDuration = 0.5f; // 스마트폰 드는 연출 시간
-        [SerializeField] private Vector3 raisedPositionOffset = new Vector3(0, 1, 0); // 스마트폰 위치 오프셋
-        [SerializeField] private Ease smartphoneAnimationEase = Ease.OutQuad; // 애니메이션 이징
-
-        private bool isSmartphoneRaised = false;
-        private Vector3 originalPosition;
-
+        [SerializeField] private CinemachineVirtualCamera cam1; // 첫 번째 카메라
+        [SerializeField] private CinemachineVirtualCamera cam2; // 두 번째 카메라
+        [SerializeField] private CanvasGroup transitionEffect;  // 페이드 효과를 위한 CanvasGroup
+        [SerializeField] private float fadeDuration = 0.5f;     // 페이드 시간
+        private bool isCam1Active = true; // 현재 활성화된 카메라 상태
+        private CancellationTokenSource _cancellationTokenSource;
         private void Start()
         {
-            if (smartphone != null)
+            // 초기 설정: 첫 번째 카메라 활성화
+            cam1.Priority = 10;
+            cam2.Priority = 0;
+            if (transitionEffect != null) transitionEffect.alpha = 0; // 페이드 초기화
+        }
+
+        private void OnEnable()
+        {
+            CharacterModeManager.Instance.onHackModeStart.AddListener(HandleSwitchCamera);
+            CharacterModeManager.Instance.onDefaultModeStart.AddListener(HandleSwitchCamera);
+        }
+
+        private void OnDisable()
+        {
+            CharacterModeManager.Instance.onHackModeStart.RemoveListener(HandleSwitchCamera);
+            CharacterModeManager.Instance.onDefaultModeStart.RemoveListener(HandleSwitchCamera);
+        }
+
+        private async void HandleSwitchCamera()
+        {
+            // 기존 작업 취소
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            try
             {
-                originalPosition = smartphone.transform.localPosition;
+                await SwitchCamerasAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.Log($"Switching to Camera was canceled.");
             }
         }
 
-        private void Update()
+        private async UniTask ListenForSwitch()
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            while (true)
             {
-                if (isSmartphoneRaised)
+                // LShift 입력 감지
+                if (Input.GetMouseButtonDown(1))
                 {
-                    LowerSmartphone().Forget();
+                    await SwitchCamerasAsync();
                 }
-                else
-                {
-                    RaiseSmartphone().Forget();
-                }
+                await UniTask.Yield(); // 다음 프레임 대기
             }
         }
 
-        private async UniTask RaiseSmartphone()
+        private async UniTask SwitchCamerasAsync()
         {
-            if (smartphone == null) return;
+            // 페이드 효과 시작
+            if (transitionEffect != null) await FadeEffectAsync(1);
 
-            isSmartphoneRaised = true;
+            // 카메라 우선순위 스위칭
+            isCam1Active = !isCam1Active;
+            cam1.Priority = isCam1Active ? 10 : 0;
+            cam2.Priority = isCam1Active ? 0 : 10;
 
-            // 스마트폰 드는 연출
-            smartphone.transform.DOLocalMove(originalPosition + raisedPositionOffset, smartphoneRaiseDuration)
-                .SetEase(smartphoneAnimationEase);
-
-            // 타임스케일 느려짐
-            await DOTween.To(() => Time.timeScale, x => Time.timeScale = x, holdTimeScale, timeScaleSlowDuration)
-                .SetEase(Ease.OutQuad)
-                .AsyncWaitForCompletion();
-
-            Time.timeScale = holdTimeScale; // 완전히 멈춤
+            // 페이드 효과 종료
+            if (transitionEffect != null) await FadeEffectAsync(0);
         }
 
-        private async UniTask LowerSmartphone()
+        private async UniTask FadeEffectAsync(float targetAlpha)
         {
-            if (smartphone == null) return;
+            if (transitionEffect == null) return;
 
-            isSmartphoneRaised = false;
-
-            // 스마트폰 내리는 연출
-            smartphone.transform.DOLocalMove(originalPosition, smartphoneRaiseDuration)
-                .SetEase(smartphoneAnimationEase);
-
-            // 타임스케일 복귀
-            await DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, timeScaleResetDuration)
-                .SetEase(Ease.InQuad)
-                .AsyncWaitForCompletion();
-
-            Time.timeScale = 1f; // 정상 속도 복귀
+            // DoTween으로 CanvasGroup의 Alpha 값 조정
+            await transitionEffect.DOFade(targetAlpha, fadeDuration).AsyncWaitForCompletion();
         }
     }
 

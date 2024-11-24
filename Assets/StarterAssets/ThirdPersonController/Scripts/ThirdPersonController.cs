@@ -1,6 +1,11 @@
-﻿ using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using Jambuddy.Adohi.Character;
+
+using UnityAtoms.BaseAtoms;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -20,7 +25,12 @@ namespace StarterAssets
 
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
-
+        public float sprintCost = 0.2f;
+        public float sprintRecovery = 0.2f;
+        public float sprintRecoveryDelay = 2f;
+        private FloatReference currentStamina => CharacterManager.Instance.currentStamina;
+        private FloatReference maxStamina => CharacterManager.Instance.maxStamina;
+        private bool isRecovering = false;
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
         public float RotationSmoothTime = 0.12f;
@@ -75,6 +85,12 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        [Header("GrabTargetController")]
+        public float VerticalLerpValue { get; private set; }
+        public Transform minHeightTransform;
+        public Transform maxHeightTransform;
+        public Transform grapTarget;
+
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -109,6 +125,8 @@ namespace StarterAssets
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+
+        private bool isControlLocked;
 
         private bool IsCurrentDeviceMouse
         {
@@ -152,18 +170,55 @@ namespace StarterAssets
             _fallTimeoutDelta = FallTimeout;
         }
 
+        private void OnEnable()
+        {
+            CharacterModeManager.Instance.onHackModeStart.AddListener(LockControls);
+            CharacterModeManager.Instance.onDefaultModeStart.AddListener(UnlockControls);
+        }
+
+        private void OnDisable()
+        {
+            CharacterModeManager.Instance.onHackModeStart.RemoveListener(LockControls);
+            CharacterModeManager.Instance.onDefaultModeStart.RemoveListener(UnlockControls);
+        }
+
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
 
-            JumpAndGravity();
+            
+
+            // 캐릭터가 카메라를 따라 회전
+            transform.rotation = Quaternion.Euler(0.0f, _cinemachineTargetYaw, 0.0f);
+
+            if(!isControlLocked)
+            {
+                Move();
+                HandleJump();
+                HandleStamina();
+            }
+
+            
+            HandleGravity();
             GroundedCheck();
-            Move();
         }
 
         private void LateUpdate()
         {
-            CameraRotation();
+            if (!isControlLocked)
+            {
+                CameraRotation();
+            }
+        }
+
+        public void LockControls()
+        {
+            isControlLocked = true;
+        }
+
+        public void UnlockControls()
+        {
+            isControlLocked = false;
         }
 
         private void AssignAnimationIDs()
@@ -192,29 +247,45 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
-            // if there is an input and camera position is not fixed
+            //Vector3 shoulderOffset = new Vector3(0.5f, 1.5f, -0.5f); // 오른쪽으로, 위로, 뒤로
+            //CinemachineCameraTarget.transform.position = transform.position + transform.TransformDirection(shoulderOffset);
+
+            // 마우스 입력에 따른 카메라 회전 처리
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
-                //Don't multiply mouse input by Time.deltaTime;
+                // 입력값에 따라 카메라 회전 값 변경
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
             }
 
-            // clamp our rotations so our values are limited 360 degrees
-            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+            // 회전 각도 제한 (위아래: BottomClamp ~ TopClamp, 좌우 제한 없음)
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-            // Cinemachine will follow this target
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
+            VerticalLerpValue = 1f - Mathf.InverseLerp(BottomClamp, TopClamp, _cinemachineTargetPitch);
+
+            var targetPosition = Vector3.Lerp(minHeightTransform.position, maxHeightTransform.position, VerticalLerpValue);
+
+            grapTarget.transform.position = targetPosition;
+
+            // 카메라 회전 설정
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(
+                _cinemachineTargetPitch,
+                _cinemachineTargetYaw,
+                0.0f
+            );
+
+
+
+
         }
+
+
 
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = (_input.sprint && !isRecovering) ? SprintSpeed : MoveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -261,7 +332,7 @@ namespace StarterAssets
                     RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                //transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
 
@@ -277,6 +348,37 @@ namespace StarterAssets
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
+        }
+
+        private void HandleStamina()
+        {
+            if (_input.sprint && !isRecovering)
+            {
+                currentStamina.Value -= sprintCost * Time.deltaTime;
+                currentStamina.Value = Mathf.Max(currentStamina, 0f);
+
+                if (currentStamina <= 0f)
+                {
+                    TriggerStaminaRecoveryDelay().Forget(); // 비동기 회복 지연
+                }
+            }
+            else if (!isRecovering)
+            {
+                RecoverStamina();
+            }
+        }
+
+        private void RecoverStamina()
+        {
+            currentStamina.Value += sprintRecovery * Time.deltaTime;
+            currentStamina.Value = Mathf.Min(currentStamina, maxStamina);
+        }
+
+        private async UniTaskVoid TriggerStaminaRecoveryDelay()
+        {
+            isRecovering = true;
+            await UniTask.Delay(System.TimeSpan.FromSeconds(sprintRecoveryDelay));
+            isRecovering = false;
         }
 
         private void JumpAndGravity()
@@ -342,6 +444,81 @@ namespace StarterAssets
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
+            if (_verticalVelocity < _terminalVelocity)
+            {
+                _verticalVelocity += Gravity * Time.deltaTime;
+            }
+        }
+
+        private void HandleJump()
+        {
+            if (Grounded)
+            {
+                // Reset fall timeout timer
+                _fallTimeoutDelta = FallTimeout;
+
+                // Update animator if using character
+                if (_hasAnimator)
+                {
+                    _animator.SetBool(_animIDJump, false);
+                    _animator.SetBool(_animIDFreeFall, false);
+                }
+
+                // Stop our velocity dropping infinitely when grounded
+                if (_verticalVelocity < 0.0f)
+                {
+                    _verticalVelocity = -2f;
+                }
+
+                // Jump
+                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                {
+                    // Calculate the velocity needed to reach the desired jump height
+                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+
+                    // Update animator if using character
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDJump, true);
+                    }
+                }
+
+                // Jump timeout
+                if (_jumpTimeoutDelta >= 0.0f)
+                {
+                    _jumpTimeoutDelta -= Time.deltaTime;
+                }
+            }
+            else
+            {
+                // Reset jump timeout timer
+                _jumpTimeoutDelta = JumpTimeout;
+
+                // If not grounded, prevent jumping
+                _input.jump = false;
+            }
+        }
+
+        private void HandleGravity()
+        {
+            if (!Grounded)
+            {
+                // Fall timeout
+                if (_fallTimeoutDelta >= 0.0f)
+                {
+                    _fallTimeoutDelta -= Time.deltaTime;
+                }
+                else
+                {
+                    // Update animator if using character
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDFreeFall, true);
+                    }
+                }
+            }
+
+            // Apply gravity over time if under terminal velocity
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
