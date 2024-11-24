@@ -1,6 +1,7 @@
 using Jambuddy.Adohi.Character.Hack;
 using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,19 @@ namespace Jambuddy.Junsu
     {
         Add,
         Delete,
+    }
+
+    public enum EffectType
+    {
+        OppositeMoving,
+        Rotation,
+        Gravity,
+        Sizing,
+    }
+
+    public class EventDuration
+    {
+        public static readonly float OPPO_MOVING = 3f;
     }
 
     public class EffectTarget : MonoBehaviour
@@ -52,6 +66,12 @@ namespace Jambuddy.Junsu
             {
                 Debug.LogWarning("이미 Oppsite Moving이 적용중임");
                 return;
+            }
+
+            if (gameObject.TryGetComponent<Prop>(out Prop prop))
+            {
+                prop.isOppositeMoving = true;
+                StartCoroutine(ResetAfterDelay(prop, EventDuration.OPPO_MOVING, EffectType.OppositeMoving));
             }
 
             var block = new OppositeMoving();
@@ -109,6 +129,19 @@ namespace Jambuddy.Junsu
             }
 
             _blockDictionary = new Dictionary<Type, Block>();
+        }
+
+        private IEnumerator ResetAfterDelay(Prop prop, float delay, EffectType effectType)
+        {
+            yield return new WaitForSeconds(delay);
+            switch (effectType)
+            {
+                case EffectType.OppositeMoving:
+                    prop.isOppositeMoving = false; ;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

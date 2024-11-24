@@ -9,7 +9,7 @@ namespace Jambuddy.Junsu
         private Transform _target;
         private NavMeshAgent _agent;
 
-        public int health = 100;
+        public int health = 10;
         public float moveSpeed;
         public int attackPower = 1;
 
@@ -29,6 +29,7 @@ namespace Jambuddy.Junsu
         public void TakeDamage(int damage)
         {
             health -= damage;
+            Debug.Log($"Monster hp: {health}");
 
             if (health <= 0)
             {

@@ -9,7 +9,7 @@ namespace Jambuddy.Junsu
     {
         private int currentStage = 0; // 현재 단계
 
-        private float gameTime = 0f; // 경과 시간
+        public float _gameTime = 0f; // 경과 시간
 
         private Coroutine monsterSpawnRoutine;
         private Coroutine propSpawnRoutine;
@@ -32,6 +32,9 @@ namespace Jambuddy.Junsu
             new StageInfo(900f, 1200f, 20, 6f) // 3단계
         };
 
+        public float GameTime { get { return _gameTime; } }
+
+
 
         private void Start()
         {
@@ -40,7 +43,7 @@ namespace Jambuddy.Junsu
 
         private void Update()
         {
-            gameTime += Time.deltaTime;
+            _gameTime += Time.deltaTime;
             //if (gameTime % 5.0f > 0 && gameTime % 5.0f <= 0.1)
             //{
             //    Debug.Log($"currentStage:{currentStage}, StageLength: {stages.Length}");
@@ -48,7 +51,7 @@ namespace Jambuddy.Junsu
             //}
 
             // 현재 스테이지가 끝났는지 확인
-            if (currentStage < _monsterStages.Length && gameTime > _monsterStages[currentStage].endTime)
+            if (currentStage < _monsterStages.Length && _gameTime > _monsterStages[currentStage].endTime)
             {
                 StartNextStage();
             }

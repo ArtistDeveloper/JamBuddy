@@ -17,10 +17,10 @@ GameObject:
   - component: {fileID: 2488228521182159749}
   - component: {fileID: 2292119515594716265}
   - component: {fileID: -3200729247642609844}
-  - component: {fileID: -4206005001677327240}
+  - component: {fileID: 8658735759405982599}
   m_Layer: 21
   m_Name: MonsterCapsule
-  m_TagString: EffectTarget
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
   tooltipName: 
   tooltip: 
   selectedOutlineWidth: 5
---- !u!114 &-4206005001677327240
+--- !u!114 &8658735759405982599
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -219,9 +219,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7355837129396861720}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0599db7dd97f0e94e905bb6542cc3eb0, type: 3}
+  m_Script: {fileID: 11500000, guid: ddaca18dd9fd21a4ca6553d2ae19140b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 10
   moveSpeed: 0
   attackPower: 10

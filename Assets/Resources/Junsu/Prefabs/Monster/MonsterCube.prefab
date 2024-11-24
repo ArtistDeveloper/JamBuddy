@@ -17,10 +17,10 @@ GameObject:
   - component: {fileID: 7101883101235949064}
   - component: {fileID: 1947679323363411999}
   - component: {fileID: 5557748674882943007}
-  - component: {fileID: 4591165147867786370}
+  - component: {fileID: 916786261323186919}
   m_Layer: 21
   m_Name: MonsterCube
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -208,7 +208,7 @@ MonoBehaviour:
   tooltipName: 
   tooltip: 
   selectedOutlineWidth: 5
---- !u!114 &4591165147867786370
+--- !u!114 &916786261323186919
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -217,9 +217,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1178238707530581846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e05260f93d1d70d40bfcb365233d8bc0, type: 3}
+  m_Script: {fileID: 11500000, guid: ddaca18dd9fd21a4ca6553d2ae19140b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 20
   moveSpeed: 0
-  attackPower: 5
+  attackPower: 1
