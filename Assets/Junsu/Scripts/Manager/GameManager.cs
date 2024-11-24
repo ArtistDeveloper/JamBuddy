@@ -92,7 +92,8 @@ namespace Jambuddy.Junsu
             {
                 yield return new WaitForSeconds(wait);
                 rand = UnityEngine.Random.Range(0, names.Length);
-                Managers.Instance.MonsterMan.MonSpawner.SpawnMonster(names[rand]);
+                GameObject mon = Managers.Instance.MonsterMan.MonSpawner.SpawnMonster(names[rand]);
+                Managers.Instance.MonsterMan.activeMonsters.Add(mon);
             }
         }
 

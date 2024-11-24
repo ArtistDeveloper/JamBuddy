@@ -5,7 +5,7 @@ namespace Jambuddy.Junsu
 {
     public class MonsterManager
     {
-        private List<GameObject> activeMonsters = new List<GameObject>();
+        public List<GameObject> activeMonsters = new List<GameObject>();
 
         private MonsterSpawner _monSpawner;
 

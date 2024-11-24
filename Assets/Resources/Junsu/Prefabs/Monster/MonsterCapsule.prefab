@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 5874739371179991771}
   - component: {fileID: 679290191331304323}
   - component: {fileID: 2488228521182159749}
-  - component: {fileID: 5638698725520258100}
   - component: {fileID: 2292119515594716265}
   - component: {fileID: -3200729247642609844}
+  - component: {fileID: -4206005001677327240}
   m_Layer: 21
   m_Name: MonsterCapsule
   m_TagString: EffectTarget
@@ -177,18 +177,6 @@ NavMeshAgent:
   m_BaseOffset: 0.99999994
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &5638698725520258100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7355837129396861720}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddaca18dd9fd21a4ca6553d2ae19140b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2292119515594716265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,3 +210,18 @@ MonoBehaviour:
   tooltipName: 
   tooltip: 
   selectedOutlineWidth: 5
+--- !u!114 &-4206005001677327240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7355837129396861720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0599db7dd97f0e94e905bb6542cc3eb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  moveSpeed: 0
+  attackPower: 10
