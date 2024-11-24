@@ -24,6 +24,7 @@ namespace Jambuddy.Junsu
     public class EventDuration
     {
         public static readonly float OPPO_MOVING = 3f;
+        public static readonly float ROTATION = 10f;
     }
 
     public class EffectTarget : MonoBehaviour
@@ -96,6 +97,12 @@ namespace Jambuddy.Junsu
                 return;
             }
 
+            if (gameObject.TryGetComponent<Prop>(out Prop prop))
+            {
+                prop.isOppositeMoving = true;
+                StartCoroutine(ResetAfterDelay(prop, EventDuration.ROTATION, EffectType.OppositeMoving));
+            }
+
             var block = new Rotation();
             _blockDictionary[typeof(Rotation)] = block;
         }
@@ -137,8 +144,12 @@ namespace Jambuddy.Junsu
             switch (effectType)
             {
                 case EffectType.OppositeMoving:
-                    prop.isOppositeMoving = false; ;
+                    prop.isOppositeMoving = false;
                     break;
+                case EffectType.Rotation:
+                    prop.isRotation = false;
+                    break;
+
                 default:
                     break;
             }

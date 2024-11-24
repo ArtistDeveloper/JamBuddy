@@ -6,7 +6,9 @@ namespace Jambuddy.Junsu
     public class Prop : MonoBehaviour
     {
         public bool isOppositeMoving;
-        public int damage = 10;
+        public bool isRotation;
+        public int opposite_damage = 10;
+        public int rotation_damage = 10;
 
         private void OnCollisionEnter(Collision other)
         {
@@ -14,7 +16,12 @@ namespace Jambuddy.Junsu
             {
                 if (isOppositeMoving)
                 {
-                    other.transform.GetComponent<Monster>().TakeDamage(damage);
+                    other.transform.GetComponent<Monster>().TakeDamage(opposite_damage);
+                }
+
+                if (isRotation)
+                {
+                    other.transform.GetComponent<Monster>().TakeDamage(rotation_damage);
                 }
             }
         }
