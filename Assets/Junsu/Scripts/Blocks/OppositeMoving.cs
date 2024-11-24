@@ -8,6 +8,9 @@ namespace Jambuddy.Junsu
     public class OppositeMoving : Block
     {
         private readonly float SPEED = 5f;
+        private NavMeshAgent _agent;
+        float _originSpeed;
+
         public Action OnMoveOppositeComplete; // Coroutine 완료 이벤트
 
         public override void ApplyEffect(EffectTarget target)
@@ -31,9 +34,12 @@ namespace Jambuddy.Junsu
             Vector3 startPosition = targetTransform.position;
 
             // 대상의 NavMesh Agent Speed는 Opposite Moving이 적용될 동안은 무효화
-            NavMeshAgent agent = targetTransform.GetComponent<NavMeshAgent>();
-            float originSpeed = agent.speed;
-            agent.speed = 0f;
+            _agent = targetTransform.GetComponent<NavMeshAgent>();
+            if (_agent != null)
+            {
+                _originSpeed = _agent.speed;
+                _agent.speed = 0f;
+            }
 
             // 플레이어와의 방향 계산 (x, z축만 사용)
             Vector3 directionToPlayer = new Vector3(
@@ -62,8 +68,11 @@ namespace Jambuddy.Junsu
                 startPosition.z + oppositeDirection.z * elapsedTime * SPEED
             );
 
-            //targetTransform.position = finalPosition;
-            agent.speed = originSpeed;
+
+            if (_agent != null)
+            {
+                _agent.speed = _originSpeed;
+            }
 
             OnMoveOppositeComplete.Invoke();
         }
