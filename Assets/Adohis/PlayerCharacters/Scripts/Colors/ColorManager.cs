@@ -1,4 +1,5 @@
 using Pixelplacement;
+using System.Collections.Generic;
 using UniRx;
 using UnityAtoms.BaseAtoms;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Jambuddy.Adohi.Colors
         public ColorReference neonYellow;
         public ColorReference neonCyan;
 
-
+        public List<ColorReference> themaColors => new List<ColorReference>() { neonPink, neonYellow, neonCyan }; 
 
         public float NeonPinkHue { get; private set; }
         public float NeonPinkSat { get; private set; }

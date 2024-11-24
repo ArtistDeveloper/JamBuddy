@@ -1,6 +1,7 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Cinemachine;
+using Cysharp.Threading.Tasks;
 using Jambuddy.Adohi.Character;
-
+using Jambuddy.Adohi.Colors;
 using UnityAtoms.BaseAtoms;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
@@ -91,6 +92,20 @@ namespace StarterAssets
         public Transform maxHeightTransform;
         public Transform grapTarget;
 
+        [Header("Particles")]
+        public ParticleSystem footStepParticle;
+        public float footStepOffsetHeight = 0.1f;
+        private int footstepCount;
+
+        [Header("NoiseSetting")]
+        public CinemachineVirtualCamera virtualCamera;
+        public float runAmplitude = 2.0f;
+        public float walkAmplitude = 0.5f;
+        public float runFrequency = 2.0f;
+        public float walkFrequency = 1.0f;
+
+        private CinemachineBasicMultiChannelPerlin noise;
+
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -168,6 +183,11 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+
+            if (virtualCamera != null)
+            {
+                noise = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            }
         }
 
         private void OnEnable()
@@ -196,6 +216,7 @@ namespace StarterAssets
                 Move();
                 HandleJump();
                 HandleStamina();
+                UpdateNoise((_input.sprint && !isRecovering));
             }
 
             
@@ -532,6 +553,15 @@ namespace StarterAssets
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
         }
 
+        public void UpdateNoise(bool isRunning)
+        {
+            if (noise != null)
+            {
+                noise.m_AmplitudeGain = isRunning ? runAmplitude : walkAmplitude;
+                noise.m_FrequencyGain = isRunning ? runFrequency : walkFrequency;
+            }
+        }
+
         private void OnDrawGizmosSelected()
         {
             Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
@@ -555,7 +585,15 @@ namespace StarterAssets
                     var index = Random.Range(0, FootstepAudioClips.Length);
                     AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume);
                 }
+
+                var footStepParitcle = Instantiate(footStepParticle);
+                var footStepMain = footStepParitcle.main;
+                footStepParitcle.transform.position = transform.position + Vector3.up * footStepOffsetHeight;
+                footStepParitcle.gameObject.SetActive(true);
+                footStepMain.startColor = ColorManager.Instance.themaColors[footstepCount % ColorManager.Instance.themaColors.Count].Value;
+                footstepCount++;
             }
+
         }
 
         private void OnLand(AnimationEvent animationEvent)
@@ -563,6 +601,15 @@ namespace StarterAssets
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
+
+                var footStepParitcle = Instantiate(footStepParticle);
+                var footStepMain = footStepParitcle.main;
+                footStepParitcle.transform.position = transform.position + Vector3.up * footStepOffsetHeight;
+                footStepParitcle.gameObject.SetActive(true);
+                footStepMain.startColor = ColorManager.Instance.themaColors[footstepCount % ColorManager.Instance.themaColors.Count].Value;
+                footStepMain.startSize = new ParticleSystem.MinMaxCurve(2f, footStepMain.startSize.curve);
+
+                footstepCount++;
             }
         }
     }
