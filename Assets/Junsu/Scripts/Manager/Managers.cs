@@ -10,6 +10,11 @@ namespace Jambuddy.Junsu
     public class Managers : MonoBehaviour
     {
         private static Managers s_instance;
+
+        private MonsterManager _monsterMan;
+
+        private GameManager _gameMan;
+
         public static Managers Instance
         {
             get
@@ -19,8 +24,7 @@ namespace Jambuddy.Junsu
             }
         }
 
-        private MonsterManager _monsterMan;
-        private GameManager _gameMan;
+        public GameManager GameMan { get { return Instance._gameMan; } }
 
         public MonsterManager MonsterMan 
         {
@@ -34,8 +38,6 @@ namespace Jambuddy.Junsu
                 return Instance._monsterMan; 
             } 
         }
-        public GameManager GameMan { get { return Instance._gameMan; } }
-
 
         private void Start()
         {
