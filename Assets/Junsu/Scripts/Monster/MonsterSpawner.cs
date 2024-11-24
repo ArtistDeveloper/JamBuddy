@@ -22,6 +22,13 @@ namespace Jambuddy.Junsu
 
         private const int GROWTH = 10;
 
+        private const float _SPWAN_HEIGNT = 5f;
+
+        private float _MIN_DISTANCE = 25f;
+
+        private float _MAX_DISTANCE = 80f;
+
+
 
         public MonsterSpawner(Transform spawnArea, int poolSize)
         {
@@ -85,11 +92,15 @@ namespace Jambuddy.Junsu
             GameObject monster = poolDictionary[monsterType].Dequeue();
             monster.SetActive(true);
 
-            Vector3 spawnPosition = new Vector3(
-                UnityEngine.Random.Range(-5f, 5f),
-                0f,
-                UnityEngine.Random.Range(-5f, 5f)
-            );
+            // 랜덤 각도와 거리 생성
+            float angle = UnityEngine.Random.Range(0f, 360f);
+            float radius = UnityEngine.Random.Range(_MIN_DISTANCE, _MAX_DISTANCE);
+
+            // 원형 좌표 계산
+            float x = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
+            float z = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
+
+            Vector3 spawnPosition = new Vector3(x, _SPWAN_HEIGNT, z);
             monster.transform.position = _spawnArea.position + spawnPosition;
 
             return monster;
@@ -99,7 +110,7 @@ namespace Jambuddy.Junsu
         {
             if (!poolDictionary.ContainsKey(monsterType))
             {
-                Debug.LogError($"No pool exists for monster type: {monsterType}");
+                Debug.LogError($"해당하는 몬스터 타입이 없습니다: {monsterType}");
                 UnityEngine.Object.Destroy(monster); // 풀이 없는 경우 파괴 처리
                 return;
             }

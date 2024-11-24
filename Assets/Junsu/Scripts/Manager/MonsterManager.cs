@@ -17,6 +17,17 @@ namespace Jambuddy.Junsu
             RandomSpawn(25);
         }
 
+        // 몬스터 생성 지형 확인
+        private void OnDrawGizmos()
+        {
+            if (spawnArea == null) return;
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(spawnArea.position, 25f); // 최소 거리
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(spawnArea.position, 80f); // 최대 거리
+        }
+
         private void RandomSpawn(int repetition)
         {
             string[] names = Util.GetNamesOfEnumElement(typeof(MonsterType));
