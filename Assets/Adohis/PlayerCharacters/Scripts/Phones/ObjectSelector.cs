@@ -120,7 +120,7 @@ namespace Jambuddy.Adohi.Character.Smartphone
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, selectableLayer))
             {
                 GameObject clickedObject = hit.collider.gameObject;
-                if (TryGetComponent(out Scanable scanable))
+                if (clickedObject.TryGetComponent(out Scanable scanable))
                 {
                     if (ctrlPressed)
                     {
