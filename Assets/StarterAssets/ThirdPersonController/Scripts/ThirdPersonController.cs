@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Jambuddy.Adohi.Character;
 using Jambuddy.Adohi.Colors;
 using UnityAtoms.BaseAtoms;
@@ -103,8 +104,11 @@ namespace StarterAssets
         public float walkAmplitude = 0.5f;
         public float runFrequency = 2.0f;
         public float walkFrequency = 1.0f;
+        public float transitionDuration = 0.5f;
 
         private CinemachineBasicMultiChannelPerlin noise;
+        private Tween amplitudeTween;
+        private Tween frequencyTween;
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -142,6 +146,7 @@ namespace StarterAssets
         private bool _hasAnimator;
 
         private bool isControlLocked;
+        private bool isRunning;
 
         private bool IsCurrentDeviceMouse
         {
@@ -216,7 +221,14 @@ namespace StarterAssets
                 Move();
                 HandleJump();
                 HandleStamina();
-                UpdateNoise((_input.sprint && !isRecovering));
+
+                var currentlyRunning = (_input.sprint && !isRecovering);
+
+                if (currentlyRunning != isRunning)
+                {
+                    isRunning = currentlyRunning;
+                    UpdateNoise(isRunning);
+                }
             }
 
             
@@ -557,8 +569,23 @@ namespace StarterAssets
         {
             if (noise != null)
             {
-                noise.m_AmplitudeGain = isRunning ? runAmplitude : walkAmplitude;
-                noise.m_FrequencyGain = isRunning ? runFrequency : walkFrequency;
+                // 목표 값 설정
+                float targetAmplitude = isRunning ? runAmplitude : walkAmplitude;
+                float targetFrequency = isRunning ? runFrequency : walkFrequency;
+
+                // 기존 Tween이 있으면 중지
+                amplitudeTween?.Kill();
+                frequencyTween?.Kill();
+
+                // DOTween으로 부드럽게 전환
+                amplitudeTween = DOTween.To(() => noise.m_AmplitudeGain,
+                                            x => noise.m_AmplitudeGain = x,
+                                            targetAmplitude,
+                                            transitionDuration);
+                frequencyTween = DOTween.To(() => noise.m_FrequencyGain,
+                                            x => noise.m_FrequencyGain = x,
+                                            targetFrequency,
+                                            transitionDuration);
             }
         }
 
