@@ -16,6 +16,8 @@ namespace Jambuddy.Junsu
     {
         Dictionary<Type, Block> _blockDictionary = new Dictionary<Type, Block>();
 
+        private bool isMovingOpposite;
+
         public void HandleBlockApplication(string blockType)
         {
             Debug.Log($"{gameObject.name} received block: {blockType}");
@@ -43,7 +45,12 @@ namespace Jambuddy.Junsu
         {
             if (_blockDictionary.ContainsKey(typeof(OppositeMoving)))
             {
-                Debug.LogWarning("OppositeMoving block already exists.");
+                return;
+            }
+
+            if (isMovingOpposite)
+            {
+                Debug.LogWarning("이미 Oppsite Moving이 적용중임");
                 return;
             }
 
@@ -55,7 +62,6 @@ namespace Jambuddy.Junsu
         {
             if (_blockDictionary.ContainsKey(typeof(Gravity)))
             {
-                Debug.LogWarning("Gravity block already exists.");
                 return;
             }
 
@@ -67,7 +73,6 @@ namespace Jambuddy.Junsu
         {
             if (_blockDictionary.ContainsKey(typeof(Rotation)))
             {
-                Debug.LogWarning("Rotation block already exists.");
                 return;
             }
 
@@ -79,7 +84,6 @@ namespace Jambuddy.Junsu
         {
             if (_blockDictionary.ContainsKey(typeof(Sizing)))
             {
-                Debug.LogWarning("Sizing block already exists.");
                 return;
             }
 
@@ -92,7 +96,19 @@ namespace Jambuddy.Junsu
             foreach (var kvp in _blockDictionary)
             {
                 kvp.Value.ApplyEffect(this);
+                if (kvp.Value is OppositeMoving)
+                {
+                    OppositeMoving opMoving = kvp.Value as OppositeMoving;
+                    isMovingOpposite = true;
+
+                    opMoving.OnMoveOppositeComplete += () =>
+                    {
+                        isMovingOpposite = false;
+                    };
+                }
             }
+
+            _blockDictionary = new Dictionary<Type, Block>();
         }
     }
 }
