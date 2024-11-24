@@ -1,4 +1,5 @@
 using Jambuddy.Adohi.Character.Smartphone;
+using Jambuddy.Junsu;
 using Pixelplacement;
 using System;
 using UnityEngine;
@@ -38,7 +39,7 @@ namespace Jambuddy.Adohi.Character.Hack
 
             if (requieredEnergy > CharacterManager.Instance.currentEnergy)
             {
-                FailHack();
+                FailHack(hackIndex);
                 return false;
             }
             else
@@ -54,12 +55,23 @@ namespace Jambuddy.Adohi.Character.Hack
 
             CharacterManager.Instance.currentEnergy.Value -= requieredEnergy;
 
+            foreach ( var item in selector.scanableObjects)
+            {
+                if (item.TryGetComponent(out EffectTarget target))
+                {
+                    target.HandleBlockApplication(hackAbilities[hackIndex].abilityName);
+                }
+            }
+
             onHackProcessed.Invoke(hackAbilities[hackIndex].abilityName);
+
             Debug.Log("Hack Successed");
         }
 
-        public void FailHack()
+        public void FailHack(int hackIndex)
         {
+            onHackFailed.Invoke(hackAbilities[hackIndex].abilityName);
+
             Debug.Log("Hack failed");
         }
     }

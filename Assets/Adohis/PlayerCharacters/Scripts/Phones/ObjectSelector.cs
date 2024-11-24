@@ -30,14 +30,18 @@ namespace Jambuddy.Adohi.Character.Smartphone
 
         private void OnEnable()
         {
-            CharacterModeManager.Instance.onHackModeEnter.AddListener(Activate);
+            CharacterModeManager.Instance.onHackModeStart.AddListener(Activate);
             CharacterModeManager.Instance.onDefaultModeStart.AddListener(DeActivate);
+            HackAbilityManager.Instance.onHackProcessed.AddListener(_ => ClearSelection());
+            HackAbilityManager.Instance.onHackFailed.AddListener(_ => ClearSelection());
         }
 
         private void OnDisable()
         {
-            CharacterModeManager.Instance.onHackModeEnter.RemoveListener(Activate);
+            CharacterModeManager.Instance.onHackModeStart.RemoveListener(Activate);
             CharacterModeManager.Instance.onDefaultModeStart.RemoveListener(DeActivate);
+            HackAbilityManager.Instance.onHackProcessed.RemoveListener(_ => ClearSelection());
+            HackAbilityManager.Instance.onHackFailed.RemoveListener(_ => ClearSelection());
         }
 
         void LateUpdate()
@@ -80,7 +84,7 @@ namespace Jambuddy.Adohi.Character.Smartphone
             ClearSelection();
             isActivate = false;
         }
-
+        
 
         private void GetInput()
         {

@@ -16,11 +16,6 @@ namespace Jambuddy.Junsu
     {
         Dictionary<Type, Block> _blockDictionary = new Dictionary<Type, Block>();
 
-        private void OnEnable()
-        {
-            HackAbilityManager.Instance.onHackProcessed.AddListener(HandleBlockApplication);
-        }
-
         public void HandleBlockApplication(string blockType)
         {
             Debug.Log($"{gameObject.name} received block: {blockType}");

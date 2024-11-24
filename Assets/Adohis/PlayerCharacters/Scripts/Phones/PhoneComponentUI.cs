@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Jambuddy.Adohi.Character.Hack;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace Jambuddy.Adohi.Character.Smartphone
         private int currentIndex = 0;
         private RectTransform previousFocusedItem = null; // 이전에 포커스된 항목
         private RectTransform currentFocusedItem = null;  // 현재 포커스된 항목
-
+        private bool isActivate = false;
         private void Start()
         {
             GenerateInitialMenuItem();
@@ -36,16 +37,33 @@ namespace Jambuddy.Adohi.Character.Smartphone
         private void OnEnable()
         {
             onHackMenuSelected.AddListener(HackAbilityManager.Instance.ProcessHack);
+            CharacterModeManager.Instance.onHackModeEnter.AddListener(Activate);
+            CharacterModeManager.Instance.onDefaultModeEnter.AddListener(DeActivate);
         }
 
         private void OnDisable()
         {
             onHackMenuSelected.AddListener(HackAbilityManager.Instance.ProcessHack);
+            CharacterModeManager.Instance.onHackModeEnter.RemoveListener(Activate);
+            CharacterModeManager.Instance.onDefaultModeEnter.RemoveListener(DeActivate);
         }
 
         private void Update()
         {
-            HandleInput();
+            if (isActivate)
+            {
+                HandleInput();
+            }
+        }
+
+        private void Activate()
+        {
+            isActivate = true;
+        }
+
+        private void DeActivate()
+        {
+            isActivate = false;
         }
 
         private void GenerateInitialMenuItem()
