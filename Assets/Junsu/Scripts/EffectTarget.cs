@@ -1,3 +1,4 @@
+using Jambuddy.Adohi.Character.Hack;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,11 @@ namespace Jambuddy.Junsu
     public class EffectTarget : MonoBehaviour
     {
         Dictionary<Type, Block> _blockDictionary = new Dictionary<Type, Block>();
+
+        private void OnEnable()
+        {
+            HackAbilityManager.Instance.onHackProcessed.AddListener(HandleBlockApplication);
+        }
 
         public void HandleBlockApplication(string blockType)
         {
@@ -34,6 +40,8 @@ namespace Jambuddy.Junsu
                     ApplyIncreaseSize();
                     break;
             }
+
+            ApplyEffect();
         }
 
         private void ApplyMoving()
