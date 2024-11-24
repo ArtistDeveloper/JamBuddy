@@ -4,6 +4,7 @@ using DG.Tweening;
 using System.Threading;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Jambuddy.Adohi.Character.Smartphone
 {
@@ -11,8 +12,9 @@ namespace Jambuddy.Adohi.Character.Smartphone
     {
         [SerializeField] private CinemachineVirtualCamera cam1; // 첫 번째 카메라
         [SerializeField] private CinemachineVirtualCamera cam2; // 두 번째 카메라
-        [SerializeField] private CanvasGroup transitionEffect;  // 페이드 효과를 위한 CanvasGroup
+        [SerializeField] private Image blurImage;  // 페이드 효과를 위한 CanvasGroup
         [SerializeField] private float fadeDuration = 0.5f;     // 페이드 시간
+        [SerializeField] private Ease ease;     // 페이드 시간
         private bool isCam1Active = true; // 현재 활성화된 카메라 상태
         private CancellationTokenSource _cancellationTokenSource;
         private void Start()
@@ -20,7 +22,7 @@ namespace Jambuddy.Adohi.Character.Smartphone
             // 초기 설정: 첫 번째 카메라 활성화
             cam1.Priority = 10;
             cam2.Priority = 0;
-            if (transitionEffect != null) transitionEffect.alpha = 0; // 페이드 초기화
+            //if (blurImage != null) blurImage.a = 0; // 페이드 초기화
         }
 
         private void OnEnable()
@@ -67,23 +69,34 @@ namespace Jambuddy.Adohi.Character.Smartphone
         private async UniTask SwitchCamerasAsync()
         {
             // 페이드 효과 시작
-            if (transitionEffect != null) await FadeEffectAsync(1);
 
             // 카메라 우선순위 스위칭
             isCam1Active = !isCam1Active;
-            cam1.Priority = isCam1Active ? 10 : 0;
-            cam2.Priority = isCam1Active ? 0 : 10;
 
+
+            
+
+            if (isCam1Active)
+            {
+                cam1.Priority = 10;
+                cam2.Priority = 0;
+                if (blurImage != null) await FadeEffectAsync(0);
+            }
+            else
+            {
+                cam1.Priority = 0;
+                cam2.Priority = 10;
+                if (blurImage != null) await FadeEffectAsync(1);
+            }
             // 페이드 효과 종료
-            if (transitionEffect != null) await FadeEffectAsync(0);
         }
 
         private async UniTask FadeEffectAsync(float targetAlpha)
         {
-            if (transitionEffect == null) return;
+            if (blurImage == null) return;
 
             // DoTween으로 CanvasGroup의 Alpha 값 조정
-            await transitionEffect.DOFade(targetAlpha, fadeDuration).AsyncWaitForCompletion();
+            await blurImage.DOFade(targetAlpha, fadeDuration).SetUpdate(true).SetEase(ease).AsyncWaitForCompletion();
         }
     }
 

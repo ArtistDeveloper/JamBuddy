@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.unify.unified-universal-blur": "https://github.com/lukakldiashvili/Unified-Universal-Blur.git",
     "com.unity-atoms.unity-atoms": "https://github.com/unity-atoms/unity-atoms.git",
     "com.unity.ai.navigation": "2.0.4",
     "com.unity.burst": "1.8.18",
