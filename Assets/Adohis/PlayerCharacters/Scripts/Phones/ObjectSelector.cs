@@ -46,30 +46,33 @@ namespace Jambuddy.Adohi.Character.Smartphone
 
         void LateUpdate()
         {
-            // 단순 클릭 및 드래그 시작
-            if (virtualPointer.IsLeftClick)
+            if (isActivate)
             {
-                GetInput();
-                if (!(ctrlPressed || shiftPressed))
+                // 단순 클릭 및 드래그 시작
+                if (virtualPointer.IsLeftClick)
                 {
-                    ClearSelection();
+                    GetInput();
+                    if (!(ctrlPressed || shiftPressed))
+                    {
+                        ClearSelection();
+                    }
+                    dragStartPos = virtualPointer.PlaneNormalizedPosition;
+                    isDragging = true;
                 }
-                dragStartPos = virtualPointer.PlaneNormalizedPosition;
-                isDragging = true;
-            }
 
-            // 드래그 종료
-            if (virtualPointer.IsLeftClickReleased && isDragging)
-            {
-                isDragging = false;
-            }
+                // 드래그 종료
+                if (virtualPointer.IsLeftClickReleased && isDragging)
+                {
+                    isDragging = false;
+                }
 
-            // 드래그 중이면 디버그 시각화
-            if (isDragging)
-            {
-                HandleVirtualClick();
-                HandleDragSelection();
-                //DrawDragRectangle();
+                // 드래그 중이면 디버그 시각화
+                if (isDragging)
+                {
+                    HandleVirtualClick();
+                    HandleDragSelection();
+                    //DrawDragRectangle();
+                }
             }
         }
 
