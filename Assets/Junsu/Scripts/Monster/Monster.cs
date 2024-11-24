@@ -1,19 +1,22 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Monster : MonoBehaviour
+namespace Jambuddy.Junsu
 {
-    private Transform _target;
-    private NavMeshAgent _agent;
-
-    private void Start()
+    public class Monster : MonoBehaviour
     {
-        _target = GameObject.FindGameObjectWithTag("Player").transform;
-        _agent = GetComponent<NavMeshAgent>();
-    }
+        private Transform _target;
+        private NavMeshAgent _agent;
 
-    void Update()
-    {
-        _agent.SetDestination(_target.position);
+        private void Start()
+        {
+            _target = GameObject.FindGameObjectWithTag("Player").transform;
+            _agent = GetComponent<NavMeshAgent>();
+        }
+
+        void Update()
+        {
+            _agent.SetDestination(_target.position);
+        }
     }
 }
