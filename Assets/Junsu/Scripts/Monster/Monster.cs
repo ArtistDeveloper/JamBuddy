@@ -1,3 +1,4 @@
+using Jambuddy.Adohi.Character;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -50,7 +51,9 @@ namespace Jambuddy.Junsu
                 Player player = collider.gameObject.GetComponent<Player>();
                 if (player != null && _canAttack)
                 {
-                    player.TakeDamage(attackPower);
+                    //player.TakeDamage(attackPower);
+                    CharacterManager.Instance.currentHealth.Value -= attackPower;
+                    
                     StartCoroutine(AttackCooldown());
                 }
             }

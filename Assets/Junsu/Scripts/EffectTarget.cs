@@ -39,16 +39,16 @@ namespace Jambuddy.Junsu
             
             switch (blockType)
             {
-                case "OppositeMoving":
+                case "혼란":
                     ApplyMoving();
                     break;
-                case "Rotation":
+                case "회전이동":
                     ApplyRotation();
                     break;
-                case "Gravity":
+                case "중력적용":
                     ApplyGravity();
                     break;
-                case "Sizing":
+                case "거대화":
                     ApplyIncreaseSize();
                     break;
             }

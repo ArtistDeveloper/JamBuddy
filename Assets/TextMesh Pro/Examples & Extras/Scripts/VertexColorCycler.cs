@@ -23,7 +23,7 @@ namespace TMPro.Examples
 
 
         /// <summary>
-        /// Method to animate vertex colors of a TMP Text object.
+        /// Method to animate vertex themaColors of a TMP Text object.
         /// </summary>
         /// <returns></returns>
         IEnumerator AnimateVertexColors()
@@ -51,7 +51,7 @@ namespace TMPro.Examples
                 // Get the index of the material used by the current character.
                 int materialIndex = textInfo.characterInfo[currentCharacter].materialReferenceIndex;
 
-                // Get the vertex colors of the mesh used by this text element (character or sprite).
+                // Get the vertex themaColors of the mesh used by this text element (character or sprite).
                 newVertexColors = textInfo.meshInfo[materialIndex].colors32;
 
                 // Get the index of the first vertex used by this text element.

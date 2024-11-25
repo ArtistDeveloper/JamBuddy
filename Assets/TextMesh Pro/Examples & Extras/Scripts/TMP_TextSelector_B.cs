@@ -420,7 +420,7 @@ namespace TMPro.Examples
 
                 }
 
-                // Example of how to modify vertex attributes like colors
+                // Example of how to modify vertex attributes like themaColors
                 #region Vertex Attribute Modification Example
                 UIVertex[] uiVertices = m_TextMeshPro.textInfo.meshInfo.uiVertices;
 
@@ -477,13 +477,13 @@ namespace TMPro.Examples
             dst_vertices[vertexIndex + 3] = src_vertices[vertexIndex + 3];
 
             // Restore Vertex Colors
-            // Get a reference to the vertex colors we need to replace.
+            // Get a reference to the vertex themaColors we need to replace.
             Color32[] dst_colors = m_TextMeshPro.textInfo.meshInfo[materialIndex].colors32;
 
-            // Get a reference to the cached / original vertex colors.
+            // Get a reference to the cached / original vertex themaColors.
             Color32[] src_colors = m_cachedMeshInfoVertexData[materialIndex].colors32;
 
-            // Copy the vertex colors from source to destination.
+            // Copy the vertex themaColors from source to destination.
             dst_colors[vertexIndex + 0] = src_colors[vertexIndex + 0];
             dst_colors[vertexIndex + 1] = src_colors[vertexIndex + 1];
             dst_colors[vertexIndex + 2] = src_colors[vertexIndex + 2];

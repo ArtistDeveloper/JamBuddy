@@ -19,6 +19,13 @@ namespace Jambuddy.Adohi.Character
         public SceneTransition sceneTransition;
 
         private bool isSceneTranstioning;
+
+        private void Awake()
+        {
+            currentHealth.Value = maxHealth;
+            currentStamina.Value = maxStamina;
+            currentEnergy.Value = maxEnergy;
+        }
         private void Update()
         {
             if (currentHealth <= 0f && !isSceneTranstioning)

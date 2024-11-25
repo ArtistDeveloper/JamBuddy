@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 519cc4fab801c4b44a0bde61c3dfe100, type: 3}
   m_Name: HackAbility_1
   m_EditorClassIdentifier: 
-  abilityName: Rotation
+  abilityName: "\uD68C\uC804\uC774\uB3D9"
   abilitytoolTip: 
   abilityCost: 0.1
