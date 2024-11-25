@@ -1,4 +1,7 @@
+using NUnit.Framework;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Jambuddy.Junsu
@@ -9,20 +12,23 @@ namespace Jambuddy.Junsu
         public bool isRotation;
         public int opposite_damage = 10;
         public int rotation_damage = 10;
-        public GameObject vfxPrefab; // Inspector에서 이 프리팹을 할당
+
+        public GameObject[] vfxPrefabs = new GameObject[3];
 
         private void OnCollisionEnter(Collision other)
         {
             if (other.collider.CompareTag("Monster"))
             {
+                int rand = UnityEngine.Random.Range(0, vfxPrefabs.GetLength(0));
+
                 if (isOppositeMoving)
                 {
-                    GameObject vfxInstance = Instantiate(vfxPrefab, other.transform.position, Quaternion.identity);
+                    GameObject vfxInstance = Instantiate(vfxPrefabs[rand], other.transform.position, Quaternion.identity);
 
                     Animator animator = vfxInstance.GetComponent<Animator>();
                     if (animator != null)
                     {
-                        animator.Play("OppositeAnim");
+                        animator.Play("Attack");
                     }
                     
                     Destroy(vfxInstance, 1.0f); // 애니메이션 길이에 맞춰서 조정
@@ -34,12 +40,12 @@ namespace Jambuddy.Junsu
                 {
                     other.transform.GetComponent<Monster>().TakeDamage(rotation_damage);
 
-                    GameObject vfxInstance = Instantiate(vfxPrefab, other.transform.position, Quaternion.identity);
+                    GameObject vfxInstance = Instantiate(vfxPrefabs[rand], other.transform.position, Quaternion.identity);
 
                     Animator animator = vfxInstance.GetComponent<Animator>();
                     if (animator != null)
                     {
-                        animator.Play("OppositeAnim");
+                        animator.Play("Attack");
                     }
 
                     Destroy(vfxInstance, 1.0f); // 애니메이션 길이에 맞춰서 조정
