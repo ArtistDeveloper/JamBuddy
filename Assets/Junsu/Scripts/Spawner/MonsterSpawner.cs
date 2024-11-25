@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UIElements;
 
 namespace Jambuddy.Junsu
@@ -26,7 +27,7 @@ namespace Jambuddy.Junsu
 
         private const int GROWTH = 10;
 
-        private const float _SPWAN_HEIGNT = 3f;
+        private const float _SPWAN_HEIGNT = 30f;
 
         private float _MIN_DISTANCE = 25f;
 
@@ -149,6 +150,19 @@ namespace Jambuddy.Junsu
             float z = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
 
             Vector3 spawnPosition = new Vector3(x, _SPWAN_HEIGNT, z);
+
+
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(spawnPosition, out hit, _SPWAN_HEIGNT, NavMesh.AllAreas))
+            {
+                GameObject go = UnityEngine.Object.Instantiate(Resources.Load<GameObject>($"Junsu/Prefabs/Monster/{monsterType}"), hit.position, Quaternion.identity);
+                go.SetActive(false);
+            }
+            else
+            {
+                Debug.LogError("No valid NavMesh position found near the spawn point!");
+            }
+
             monster.transform.position = _spawnArea + spawnPosition;
 
             return monster;
