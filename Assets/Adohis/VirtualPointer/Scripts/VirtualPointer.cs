@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.UI;
 
 namespace Jambuddy.Adohi.Character.Smartphone
 {
@@ -21,6 +21,7 @@ namespace Jambuddy.Adohi.Character.Smartphone
         public bool IsLeftClickHeld => Input.GetMouseButton(0); // 왼쪽 클릭 유지 여부
 
         public RectTransform dragUI; // 미리 설정된 사각형 객체
+        public RectTransform canvas; 
 
         private bool isActivate;
         
@@ -210,25 +211,34 @@ namespace Jambuddy.Adohi.Character.Smartphone
 
         void StartDrawing()
         {
+            var widthMul = canvas.sizeDelta.x / Screen.width;
+            var heightMul = canvas.sizeDelta.y / Screen.height;
+            var canvasPos = new Vector2 ( widthMul * screenPosition.x, heightMul * screenPosition.y);
             // 드래그 시작 위치 저장
-            startMousePosition = screenPosition;
+            startMousePosition = canvasPos;
 
             // 사각형 활성화 및 초기화
             dragUI.gameObject.SetActive(true);
             dragUI.position = startMousePosition;
             dragUI.sizeDelta = Vector2.zero;
-
+            Debug.Log((screenPosition, canvasPos, widthMul, heightMul));
             isDragging = true;
         }
 
         void UpdateRectangle()
         {
-            Vector2 currentMousePosition = screenPosition;
+            var widthMul = canvas.sizeDelta.x / Screen.width;
+            var heightMul = canvas.sizeDelta.y / Screen.height;
+            var canvasPos = new Vector2 ( widthMul * screenPosition.x, heightMul * screenPosition.y);
+
+            Vector2 currentMousePosition = canvasPos;
             Vector2 size = currentMousePosition - startMousePosition;
 
+           // dragUI.sizeDelta = new Vector2(Mathf.Abs(sizeCanvas.x), Mathf.Abs(sizeCanvas.y));
+            //dragUI.anchoredPosition = startPositionCanvas + sizeCanvas / 2f;
             // 사각형 위치와 크기 업데이트
             dragUI.sizeDelta = new Vector2(Mathf.Abs(size.x), Mathf.Abs(size.y));
-            dragUI.position = startMousePosition + size / 2f;
+            dragUI.anchoredPosition = startMousePosition + size / 2f;
         }
 
         void EndDrawing()
@@ -237,6 +247,7 @@ namespace Jambuddy.Adohi.Character.Smartphone
             dragUI.gameObject.SetActive(false);
             isDragging = false;
         }
+
 
         void OnDrawGizmos()
         {

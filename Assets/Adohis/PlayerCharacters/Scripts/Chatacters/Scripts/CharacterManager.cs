@@ -1,3 +1,6 @@
+using EasyTransition;
+using Jambuddy.Adohi.Scenes;
+using Jambuddy.Adohi.Title;
 using Pixelplacement;
 using UnityAtoms.BaseAtoms;
 using UnityEngine;
@@ -12,16 +15,27 @@ namespace Jambuddy.Adohi.Character
         public FloatReference currentStamina;
         public FloatReference maxEnergy;
         public FloatReference currentEnergy;
-        void Start()
-        {
 
+        public SceneTransition sceneTransition;
+
+        private bool isSceneTranstioning;
+        private void Update()
+        {
+            if (currentHealth <= 0f && !isSceneTranstioning)
+            {
+                GameEnd();
+            }
         }
 
-        // Update is called once per frame
-        void Update()
+        public void GetDamage(float damage)
         {
+            currentHealth.Value -= damage;
+        }
 
+        public void GameEnd()
+        {
+            isSceneTranstioning = true;
+            sceneTransition.LoadScene();
         }
     }
-
 }

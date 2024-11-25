@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: OppositeMoving
   abilitytoolTip: 
-  abilityCost: 0
+  abilityCost: 0.1

@@ -6,8 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Adohis/Titles/Scenes/TitleScene.unity
+    guid: bd8294ea8c634d443a16bf6c05ded25e
+  - enabled: 1
+    path: Assets/Adohis/Titles/Scenes/CutScene.unity
+    guid: 379ad8c0eb7782548adad705662449cb
+  - enabled: 1
+    path: Assets/Adohis/Titles/Scenes/CutScene_01.unity
+    guid: 3d930672fe364004a92a3c8a4458044c
+  - enabled: 1
+    path: Assets/Adohis/PlayerCharacters/Scenes/Environment_Free.unity
+    guid: c732593fe76e5a84197f9cd13963f706
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

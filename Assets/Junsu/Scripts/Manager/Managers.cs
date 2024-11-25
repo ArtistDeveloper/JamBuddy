@@ -14,6 +14,7 @@ namespace Jambuddy.Junsu
         private MonsterManager _monsterMan;
 
         private GameManager _gameMan;
+        private PropSpawner _propSpawner;
 
         public static Managers Instance
         {
@@ -23,6 +24,7 @@ namespace Jambuddy.Junsu
                 return s_instance;
             }
         }
+
 
         // 몬스터 생성 지형 확인
         private void OnDrawGizmos()
@@ -48,6 +50,19 @@ namespace Jambuddy.Junsu
                 }
                 return Instance._monsterMan; 
             } 
+        }
+
+        public PropSpawner PropSpawner
+        {
+            get
+            {
+                if (_propSpawner == null)
+                {
+                    _propSpawner = new PropSpawner(10);
+                    _propSpawner.Init();
+                }
+                return Instance._propSpawner;
+            }
         }
 
         private void Start()

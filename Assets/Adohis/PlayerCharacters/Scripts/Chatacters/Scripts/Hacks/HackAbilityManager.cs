@@ -19,7 +19,15 @@ namespace Jambuddy.Adohi.Character.Hack
 
         [HideInInspector] public ObjectSelector selector;
 
-        
+
+        [Header("Energy")]
+        public float energyRecoverySpeed = 0.2f;
+
+
+        private void Update()
+        {
+            CharacterManager.Instance.currentEnergy.Value = Mathf.Clamp(CharacterManager.Instance.currentEnergy.Value + energyRecoverySpeed * Time.deltaTime, 0f, 1f);
+        }
 
         public void ProcessHack(int hackIndex)
         {
