@@ -1,6 +1,7 @@
 using Jambuddy.Adohi.Character.Hack;
 using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,20 @@ namespace Jambuddy.Junsu
     {
         Add,
         Delete,
+    }
+
+    public enum EffectType
+    {
+        OppositeMoving,
+        Rotation,
+        Gravity,
+        Sizing,
+    }
+
+    public class EventDuration
+    {
+        public static readonly float OPPO_MOVING = 3f;
+        public static readonly float ROTATION = 10f;
     }
 
     public class EffectTarget : MonoBehaviour
@@ -54,6 +69,12 @@ namespace Jambuddy.Junsu
                 return;
             }
 
+            if (gameObject.TryGetComponent<Prop>(out Prop prop))
+            {
+                prop.isOppositeMoving = true;
+                StartCoroutine(ResetAfterDelay(prop, EventDuration.OPPO_MOVING, EffectType.OppositeMoving));
+            }
+
             var block = new OppositeMoving();
             _blockDictionary[typeof(OppositeMoving)] = block;
         }
@@ -74,6 +95,12 @@ namespace Jambuddy.Junsu
             if (_blockDictionary.ContainsKey(typeof(Rotation)))
             {
                 return;
+            }
+
+            if (gameObject.TryGetComponent<Prop>(out Prop prop))
+            {
+                prop.isOppositeMoving = true;
+                StartCoroutine(ResetAfterDelay(prop, EventDuration.ROTATION, EffectType.OppositeMoving));
             }
 
             var block = new Rotation();
@@ -109,6 +136,23 @@ namespace Jambuddy.Junsu
             }
 
             _blockDictionary = new Dictionary<Type, Block>();
+        }
+
+        private IEnumerator ResetAfterDelay(Prop prop, float delay, EffectType effectType)
+        {
+            yield return new WaitForSeconds(delay);
+            switch (effectType)
+            {
+                case EffectType.OppositeMoving:
+                    prop.isOppositeMoving = false;
+                    break;
+                case EffectType.Rotation:
+                    prop.isRotation = false;
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 }

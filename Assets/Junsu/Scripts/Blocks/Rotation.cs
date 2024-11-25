@@ -7,11 +7,10 @@ namespace Jambuddy.Junsu
     public class Rotation : Block
     {
         private readonly float SPEED = 300.0f;
-        private readonly float DURATION = 10f;
 
         public override void ApplyEffect(EffectTarget target)
         {
-            target.StartCoroutine(Rotate(target.transform, DURATION, SPEED)); // 10초 동안 회전
+            target.StartCoroutine(Rotate(target.transform, EventDuration.ROTATION, SPEED)); // 10초 동안 회전
         }
 
         private IEnumerator Rotate(Transform targetTransform, float duration, float speed)

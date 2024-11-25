@@ -7,6 +7,7 @@ TagManager:
   - CinemachineTarget
   - Selectable
   - EffectTarget
+  - Monster
   layers:
   - Default
   - TransparentFX
