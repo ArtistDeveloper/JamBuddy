@@ -197,3 +197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2170fad63964e1e4590f21a4542e3324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOppositeMoving: 0
+  isRotation: 0
+  opposite_damage: 10
+  rotation_damage: 10
+  vfxPrefab: {fileID: 5526144553962159640, guid: 31b9dbc8b26b1ca4bb14ad492b41ed33, type: 3}
